@@ -8,4 +8,4 @@ class User(AbstractUser):
 class UserFriend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='friends')
-    friends = models.ForeignKey(User, on_delete=models.SET_NULL)
+    friends = models.ForeignKey(User, on_delete=models.PROTECT)
