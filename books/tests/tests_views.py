@@ -3,7 +3,7 @@ from accounts.models import User
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
-class ReviewViewTest(APITestCase):
+class BookViewTest(APITestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(
             username="user",
