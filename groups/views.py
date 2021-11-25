@@ -15,7 +15,6 @@ class GroupModelView(viewsets.ModelViewSet):
 
     permission_classes = [IsAuthenticated]
 
-
     @action(methods=['post'], detail=True)
     def subscription(self, request, *args, **kwargs):
         group = self.get_object()
