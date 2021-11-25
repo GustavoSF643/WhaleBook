@@ -6,17 +6,21 @@ from .models import Group, JoinGroupRequest
 from .serializers import GroupSerializer, JoinGroupSerilizer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 class GroupModelView(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+    permission_classes = [IsAuthenticated]
+
+
     @action(methods=['post'], detail=True)
     def subscription(self, request, *args, **kwargs):
         group = self.get_object()
    
-        JoinGroupRequest.objects.create(user_id=kwargs['pk'], group_id=group)
+        JoinGroupRequest.objects.create(user_id=request.user.id, group_id=group.id)
 
         return Response({'Message':'Created request to join the group'}, status=status.HTTP_201_CREATED)
 
@@ -24,7 +28,7 @@ class GroupModelView(viewsets.ModelViewSet):
     def accept_member(self, request, *args, **kwargs):
         group = self.get_object()
 
-        new_member = get_object_or_404(User, id=kwargs['pk'])
+        new_member = get_object_or_404(User, id=request.data['new_member'])
 
         group.users.add(new_member)
     
