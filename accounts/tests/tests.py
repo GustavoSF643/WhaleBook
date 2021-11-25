@@ -58,17 +58,6 @@ class UserViewsTest(APITestCase):
             "password": "123456"
         }
 
-        self.ordinary_user_2 = {
-            "username": "equeiroz",
-            "password": "123456",
-            "is_superuser": False,
-            "is_staff": True
-        }
-        self.login_ordinary_user_2 = {
-            "username": "equeiroz",
-            "password": "123456"
-        }
-
         self.login_admin_user_wrong_password = {
             "username": "machado",
             "password": "36549"
@@ -145,3 +134,13 @@ class UserViewsTest(APITestCase):
             'error': 'username or password do not match'
         })
         self.assertEqual(response.status_code, 401)
+
+    def test_login_user_not_found_fail(self):
+        self.client.post('/api/accounts/', self.admin_user)
+        response = self.client.post('/api/login/',
+                                    self.login_not_found_user)
+        
+        self.assertDictEqual(response.json(), {
+            'error': 'This user does not exist'
+        })
+        self.assertEqual(response.status_code, 404)
