@@ -6,14 +6,15 @@ class ImageLinksSerializer(serializers.Serializer):
 
 class VolumeInfoSerializer(serializers.Serializer):
     title = serializers.CharField()
-    subtitle = serializers.CharField()
-    authors = serializers.ListField()
-    description = serializers.CharField()
-    pageCount = serializers.IntegerField()
-    categories = serializers.ListField()
-    imageLinks = ImageLinksSerializer()
-    language = serializers.CharField()
+    subtitle = serializers.CharField(required=False)
+    authors = serializers.ListField(required=False)
+    description = serializers.CharField(required=False)
+    pageCount = serializers.IntegerField(required=False)
+    categories = serializers.ListField(required=False)
+    imageLinks = ImageLinksSerializer(required=False)
+    language = serializers.CharField(required=False)
 
 class BooksSerializer(serializers.Serializer):
     id = serializers.CharField()
+    selfLink = serializers.CharField()
     volumeInfo = VolumeInfoSerializer()
