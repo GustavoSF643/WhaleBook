@@ -5,7 +5,5 @@ router = SimpleRouter()
 
 router.register(r'groups', GroupModelView, basename='groups')
 
-print(router.urls)
-
 urlpatterns = router.urls
 

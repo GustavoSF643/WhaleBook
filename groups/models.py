@@ -14,3 +14,4 @@ class GroupUser(models.Model):
 class JoinGroupRequest(models.Model):
     group = models.ForeignKey('groups.Group', on_delete=models.PROTECT)
     user = models.ForeignKey('accounts.User', on_delete=models.PROTECT) 
+    status = models.BooleanField(default=False)
