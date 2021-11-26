@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from books.models import BookReview
+
 class ImageLinksSerializer(serializers.Serializer):
     smallThumbnail = serializers.CharField()
     thumbnail = serializers.CharField()
@@ -18,3 +20,8 @@ class BooksSerializer(serializers.Serializer):
     id = serializers.CharField()
     selfLink = serializers.CharField()
     volumeInfo = VolumeInfoSerializer()
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookReview
+        fields = ['id', 'user', 'book_id', 'stars', 'review']
