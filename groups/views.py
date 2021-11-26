@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from utils.permissions import IsLeaderOfGroup
 
 from .models import Group, JoinGroupRequest
-from .serializers import GroupSerializer, JoinGroupSerilizer
+from .serializers import GroupSerializer, JoinGroupSerilizer, UserGroupSerializer
 
 
 class GroupModelView(viewsets.ModelViewSet):
@@ -22,8 +22,7 @@ class GroupModelView(viewsets.ModelViewSet):
         request.data['user'] = request.user
 
         return super().create(request, *args, **kwargs)
-
-
+    
     @action(methods=['post'], detail=True)
     def subscription(self, request, *args, **kwargs):
         group = self.get_object()
@@ -52,5 +51,13 @@ class GroupModelView(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    @action(methods=['get'], detail=True)
+    def members(self, request, *args, **kwargs):
+        group = self.get_object()
 
-    
+        members = group.users.all()
+        
+        serializer = UserGroupSerializer(members, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
