@@ -51,4 +51,19 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friends', to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.CreateModel(
+            name='UserBooks',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('book_url', models.CharField(max_length=255)),
+                ('image_url', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=255)),
+                ('total_pages', models.IntegerField()),
+                ('current_page', models.IntegerField()),
+                ('is_favorite', models.BooleanField()),
+                ('is_reading', models.BooleanField()),
+                ('read', models.BooleanField()),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='books', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
     ]

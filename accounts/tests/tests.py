@@ -40,7 +40,8 @@ class UserViewsTest(APITestCase):
             "username": "machado",
             "password": "123456",
             "is_staff": True,
-            "is_superuser": True
+            "is_superuser": True,
+            "is_active": True
         }
         self.login_admin_user = {
             "username": "machado",
@@ -51,7 +52,8 @@ class UserViewsTest(APITestCase):
             "username": "fpessoa",
             "password": "123456",
             "is_superuser": False,
-            "is_staff": True
+            "is_staff": True,
+            "is_active": True
         }
         self.login_ordinary_user_1 = {
             "username": "fpessoa",
@@ -106,12 +108,6 @@ class UserViewsTest(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_create_user_fail(self):
-        response = self.client.post('/api/accounts/', self.missing_data_user_1)
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.json(), {
-            "is_superuser": ["This field is required"]
-        })
-
         response = self.client.post('/api/accounts/', self.missing_data_user_2)
         self.assertEqual(response.status_code, 400)
         self.assertDictEqual(response.json(), {
@@ -122,7 +118,7 @@ class UserViewsTest(APITestCase):
     def test_login_user(self):
         self.client.post('/api/accounts/', self.ordinary_user_1)
         response = self.client.post('/api/login/', self.login_ordinary_user_1)
-        self.assertIn('access_token', response.json())
+        self.assertIn('access', response.json())
         self.assertEqual(response.status_code, 200)
 
     def test_login_user_fail(self):
@@ -131,7 +127,7 @@ class UserViewsTest(APITestCase):
                                     self.login_admin_user_wrong_password)
         
         self.assertDictEqual(response.json(), {
-            'error': 'username or password do not match'
+            'detail': 'No active account found with the given credentials'
         })
         self.assertEqual(response.status_code, 401)
 
@@ -141,6 +137,6 @@ class UserViewsTest(APITestCase):
                                     self.login_not_found_user)
         
         self.assertDictEqual(response.json(), {
-            'error': 'This user does not exist'
+            'detail': 'No active account found with the given credentials'
         })
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 401)
