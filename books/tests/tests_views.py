@@ -1,10 +1,9 @@
-from django.http import response
 from accounts.models import User
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class BookViewTest(APITestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.user = User.objects.create_user(
             username="user",
             password="12345678",
