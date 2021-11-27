@@ -2,7 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
 from rest_framework import status
-from books.serializers import BooksSerializer
+from books.models import BookReview
+from books.serializers import BooksSerializer, ReviewSerializer
+from rest_framework import generics
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 
 class BooksView(APIView):
     def get(self, request):
@@ -38,3 +43,14 @@ class BookRetrieveView(APIView):
         serializer.is_valid(raise_exception=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ReviewView(generics.ListCreateAPIView):
+    queryset = BookReview.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+class ReviewRetrieveView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BookReview.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
