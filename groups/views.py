@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from utils.permissions import IsLeaderOfGroup
 
-from .models import Group, JoinGroupRequest
-from .serializers import GroupSerializer, JoinGroupSerilizer, UserGroupSerializer
+from .models import Group, GroupGoals, JoinGroupRequest
+from .serializers import GroupGoalSeriliazer, GroupSerializer, UserGroupSerializer, JoinGroupSerializer
 
 
 class GroupModelView(viewsets.ModelViewSet):
@@ -47,7 +47,7 @@ class GroupModelView(viewsets.ModelViewSet):
 
         new_members_request = JoinGroupRequest.objects.filter(group_id=group.id)
 
-        serializer = JoinGroupSerilizer(new_members_request, many=True)
+        serializer = JoinGroupSerializer(new_members_request, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -61,3 +61,15 @@ class GroupModelView(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(methods=['post'], detail=True, permission_classes=[IsLeaderOfGroup])
+    def create_goal(self, request, *args, **kwargs):
+        group = self.get_object()
+        request.data['group_id'] = group.id
+
+        request.data['owner_id'] = request.user.id
+
+        new_goal = GroupGoals.objects.create(**request.data)
+
+        serializer = GroupGoalSeriliazer(new_goal)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

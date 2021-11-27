@@ -13,7 +13,7 @@ class GroupModelTest(TestCase):
         )
         
         refresh = RefreshToken.for_user(self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + refresh.access_token)
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + str(refresh.access_token))
 
         self.new_group = Group.objects.create(
             leader=1,

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from accounts.models import User
-from .models import Group
+from .models import Group, GroupGoals
 
 class UserGroupSerializer(ModelSerializer):
       class Meta:
@@ -23,5 +23,12 @@ class GroupSerializer(ModelSerializer):
 
         return group
 
-class JoinGroupSerilizer(serializers.Serializer):
+class GroupGoalSeriliazer(ModelSerializer):
+    class Meta:
+        model = GroupGoals
+        exclude = ['group', 'members', 'owner']
+        
+
+class JoinGroupSerializer(serializers.Serializer):
     user = UserGroupSerializer(read_only=True)
+
