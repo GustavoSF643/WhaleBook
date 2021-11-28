@@ -53,4 +53,6 @@ class ReviewRetrieveView(generics.RetrieveUpdateDestroyAPIView):
     queryset = BookReview.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    lookup_url_kwarg = 'review_id'
+
 
