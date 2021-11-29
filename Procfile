@@ -1,1 +1,1 @@
-web: gunicorn q4-capstone-django.wsgi 
+web: gunicorn capstone_django.wsgi 
