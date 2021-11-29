@@ -1,11 +1,12 @@
+from django.db.models import query
 from rest_framework import status
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
-from accounts.models import User
+from accounts.models import User, UserBooks
 from accounts.serializers import (CreateUserSerializer,
                                   CustomizedTokenPairSerializer,
                                   UserDataSerializer, UserUpdateSerializer)
@@ -67,4 +68,13 @@ class AddUserFriendView(APIView):
         user.save()
         serializer = UserDataSerializer(user)
         return Response(serializer.data)
-        
+
+
+class AddBookView(CreateAPIView, UpdateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    queryset = UserBooks.objects.all()
+    serializer_class = UserUpdateSerializer
+
+    lookup_url_kwarg = 'user_book_id'

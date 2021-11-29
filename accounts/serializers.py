@@ -33,6 +33,13 @@ class UserBooksSerializer(serializers.ModelSerializer):
         model = UserBooks
         fields = '__all__'
 
+    def create(self, validated_data):
+        return UserBooks.objects.create(**validated_data, user=self.context['resquest'].user)
+    
+    def update(self, instance, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().update(instance, validated_data)
+
 
 class UserDataSerializer(serializers.ModelSerializer):
     friends = FriendUserSerializer(many=True)

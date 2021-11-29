@@ -11,8 +11,8 @@ class UserBooks(models.Model):
     title = models.CharField(max_length=255)
     total_pages = models.IntegerField()
     current_page = models.IntegerField()
-    is_favorite = models.BooleanField()
-    is_reading = models.BooleanField()
-    read = models.BooleanField()
+    is_favorite = models.BooleanField(default=True)
+    is_reading = models.BooleanField(default=False)
+    read = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='books')
