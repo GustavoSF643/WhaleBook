@@ -3,6 +3,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIVie
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from accounts.models import User, UserBooks
@@ -102,3 +103,11 @@ class RetrieveUpdateDeleteUserBooks(RetrieveUpdateDestroyAPIView):
     serializer_class = UserBooksSerializer
     
     lookup_url_kwarg = 'book_id'
+    
+    def get_object(self):
+        obj = super().get_object()
+        
+        if obj.user != self.request.user:
+            raise PermissionDenied
+        
+        return obj
