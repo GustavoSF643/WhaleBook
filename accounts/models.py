@@ -3,6 +3,7 @@ from django.db import models
 
 class User(AbstractUser):
     friends = models.ManyToManyField('accounts.User')
+    email = models.EmailField(max_length=254, unique=True)
 
 
 class UserBooks(models.Model):
