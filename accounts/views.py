@@ -1,14 +1,13 @@
-from django.db.models import query
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from accounts.models import User, UserBooks
 from accounts.serializers import (CreateUserSerializer,
-                                  CustomizedTokenPairSerializer,
+                                  CustomizedTokenPairSerializer, UserBooksSerializer,
                                   UserDataSerializer, UserUpdateSerializer)
 
 
@@ -36,7 +35,7 @@ class ListUsersView(ListAPIView):
 
 class RetrieveUpdateUserView(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
@@ -57,24 +56,49 @@ class RetrieveUpdateUserView(RetrieveUpdateAPIView):
         return super().filter_queryset(queryset)
 
 
-class AddUserFriendView(APIView):
+class AddRemoveUserFriendView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def put(self, request, friend_id):
+    def post(self, request, friend_id):
         user = request.user
         friend = User.objects.get(id=friend_id)
         user.friends.add(friend)
-        user.save()
         serializer = UserDataSerializer(user)
         return Response(serializer.data)
+    
+    def delete(self, request, friend_id):
+        user = request.user
+        user.friends.remove(friend_id)
+        serializer = UserDataSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)
 
 
-class AddBookView(CreateAPIView, UpdateAPIView):
+class ListAddBookView(ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     queryset = UserBooks.objects.all()
-    serializer_class = UserUpdateSerializer
+    serializer_class = UserBooksSerializer
 
-    lookup_url_kwarg = 'user_book_id'
+    def get_queryset(self):
+        self.queryset = self.queryset.filter(user=self.request.user.id)
+        return super().get_queryset()
+    
+    def create(self, request, *args, **kwargs):
+        queryset = self.queryset.filter(user=request.user.id).filter(title=request.data['title'])
+        if queryset:
+            return Response({
+                'error': 'Book already added'
+            }, status.HTTP_400_BAD_REQUEST)
+        return super().create(request, *args, **kwargs)
+
+
+class RetrieveUpdateDeleteUserBooks(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    queryset = UserBooks.objects.all()
+    serializer_class = UserBooksSerializer
+    
+    lookup_url_kwarg = 'book_id'

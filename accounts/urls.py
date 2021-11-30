@@ -1,6 +1,6 @@
 from django.urls import path
 
-from accounts.views import (AddBookView, AddUserFriendView, CreateAcountView,
+from accounts.views import (ListAddBookView, AddRemoveUserFriendView, CreateAcountView, RetrieveUpdateDeleteUserBooks,
                             CustomizedTokenObtainPairView, ListUsersView,
                             RetrieveUpdateUserView)
 
@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', CustomizedTokenObtainPairView.as_view()),
     path('users/', ListUsersView.as_view()),
     path('users/<int:user_id>/', RetrieveUpdateUserView.as_view()),
-    path('users/<int:friend_id>/add', AddUserFriendView.as_view()),
-    path('users/<int:user_book_id>/', AddBookView.as_view())
+    path('users/friends/<int:friend_id>/', AddRemoveUserFriendView.as_view()),
+    path('users/books/', ListAddBookView.as_view()),
+    path('users/books/<int:book_id>/', RetrieveUpdateDeleteUserBooks.as_view())
 ]
