@@ -5,8 +5,8 @@ from django.db.models.fields.related import ForeignKey
 def validate_stars(value):
     if value < 1:
         raise ValidationError('Ensure this value is greater than or equal to 1.')
-    if value > 10:
-        raise ValidationError('Ensure this value is less than or equal to 10.')
+    if value > 5:
+        raise ValidationError('Ensure this value is less than or equal to 5.')
 
 class BookReview(models.Model):
     user = ForeignKey('accounts.User', on_delete=models.PROTECT, related_name='reviews')

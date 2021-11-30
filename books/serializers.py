@@ -15,6 +15,7 @@ class VolumeInfoSerializer(serializers.Serializer):
     categories = serializers.ListField(required=False)
     imageLinks = ImageLinksSerializer(required=False)
     language = serializers.CharField(required=False)
+    averageRating = serializers.FloatField()
 
 class BooksSerializer(serializers.Serializer):
     id = serializers.CharField()
@@ -26,6 +27,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = BookReview
         fields = ['id', 'user', 'book_id', 'stars', 'review']
         read_only_fields = ['user', 'book_id']
+        extra_kwargs = {'review': {'required': False}}
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
