@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-9z@rrc#oz&g0w$_@b#-8or@(oj9z9i#m-h@krw^zl!uf1h#2%t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['q4-capstone-django.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -112,6 +112,15 @@ if test:
         }
     }
 
+DATABASE_URL = os.environ.get('HEROKU_POSTGRESQL_OLIVE_URL')
+
+import dj_database_url
+
+if DATABASE_URL:
+    db_from_env = dj_database_url.config(
+        default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+    DATABASES['default'].update(db_from_env)
+    DEBUG = False
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

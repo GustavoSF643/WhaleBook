@@ -27,8 +27,14 @@ class GroupGoalSeriliazer(ModelSerializer):
     class Meta:
         model = GroupGoals
         exclude = ['group', 'members', 'owner']
-        
+
+        extra_kwargs = {
+            'owner': {'read_only': True},
+            'group': {'read_only': True},
+        }
+
+    def create(self, validated_data):
+        return GroupGoals.objects.create(**self.initial_data)                
 
 class JoinGroupSerializer(serializers.Serializer):
     user = UserGroupSerializer(read_only=True)
-
