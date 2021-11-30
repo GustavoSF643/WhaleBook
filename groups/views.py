@@ -1,20 +1,24 @@
 from accounts.models import User
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from utils.permissions import IsLeaderOfGroupOrReadOnly
 from django.core.exceptions import ObjectDoesNotExist
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 
 from .models import Group, GroupGoals, JoinGroupRequest
 from .serializers import GroupGoalSeriliazer, GroupSerializer, UserGroupSerializer, JoinGroupSerializer
 
-
 class GroupView(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['leader_id']
 
     permission_classes = [IsAuthenticated]
 
