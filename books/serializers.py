@@ -15,6 +15,7 @@ class VolumeInfoSerializer(serializers.Serializer):
     categories = serializers.ListField(required=False)
     imageLinks = ImageLinksSerializer(required=False)
     language = serializers.CharField(required=False)
+    averageRating = serializers.FloatField()
 
 class BooksSerializer(serializers.Serializer):
     id = serializers.CharField()
