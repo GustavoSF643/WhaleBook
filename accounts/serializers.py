@@ -79,3 +79,9 @@ class UserBooksSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
+
+class UserReviewSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    book_id = serializers.CharField()
+    stars = serializers.IntegerField()
+    review = serializers.CharField()

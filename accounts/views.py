@@ -8,8 +8,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from accounts.models import User, UserBooks
 from accounts.serializers import (CreateUserSerializer,
-                                  CustomizedTokenPairSerializer, UserBooksSerializer,
-                                  UserDataSerializer, UserUpdateSerializer)
+                                  CustomizedTokenPairSerializer, FriendUserSerializer, UserBooksSerializer,
+                                  UserDataSerializer, UserReviewSerializer, UserUpdateSerializer)
 
 
 class CreateAcountView(APIView):
@@ -56,6 +56,24 @@ class RetrieveUpdateUserView(RetrieveUpdateAPIView):
         queryset = self.queryset.filter(is_active=True)
         return super().filter_queryset(queryset)
 
+class UserRetrieveView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserDataSerializer(user)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class FriendsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        friends = request.user.friends
+
+        serializer = FriendUserSerializer(friends, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AddRemoveUserFriendView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -63,16 +81,33 @@ class AddRemoveUserFriendView(APIView):
 
     def post(self, request, friend_id):
         user = request.user
-        friend = User.objects.get(id=friend_id)
-        user.friends.add(friend)
-        serializer = UserDataSerializer(user)
-        return Response(serializer.data)
+        if user.id == friend_id:
+            return Response({"errors": "You cannot add yourself as a friend"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user.friends.get(id=friend_id)
+        except User.DoesNotExist:
+            try:
+                friend = User.objects.get(id=friend_id)
+            except User.DoesNotExist:
+                return Response({"errors": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+                
+            user.friends.add(friend)
+            serializer = UserDataSerializer(user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response({"errors": "Friend already added."}, status=status.HTTP_409_CONFLICT)
     
     def delete(self, request, friend_id):
         user = request.user
+        try:
+            user.friends.get(id=friend_id)
+        except User.DoesNotExist:
+            return Response({"errors": "Friend not found."}, status=status.HTTP_404_NOT_FOUND)
+
         user.friends.remove(friend_id)
         serializer = UserDataSerializer(user)
-        return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.data, status.HTTP_204_NO_CONTENT)
 
 
 class ListAddBookView(ListCreateAPIView):
@@ -111,3 +146,14 @@ class RetrieveUpdateDeleteUserBooks(RetrieveUpdateDestroyAPIView):
             raise PermissionDenied
         
         return obj
+
+class UserReviewsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        reviews = user.reviews
+        serializer = UserReviewSerializer(reviews, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
