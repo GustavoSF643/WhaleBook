@@ -56,6 +56,15 @@ class RetrieveUpdateUserView(RetrieveUpdateAPIView):
         queryset = self.queryset.filter(is_active=True)
         return super().filter_queryset(queryset)
 
+class UserRetrieveView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserDataSerializer(user)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class FriendsView(APIView):
     permission_classes = [IsAuthenticated]
 
