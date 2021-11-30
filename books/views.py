@@ -5,7 +5,6 @@ from rest_framework import status
 from books.models import BookReview
 from books.serializers import BooksSerializer, ReviewSerializer
 from rest_framework import generics
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 

@@ -27,6 +27,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = BookReview
         fields = ['id', 'user', 'book_id', 'stars', 'review']
         read_only_fields = ['user', 'book_id']
+        extra_kwargs = {'review': {'required': False}}
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
