@@ -52,6 +52,16 @@ class GroupView(viewsets.ModelViewSet):
     
         return Response({'Message':'New member added'}, status=status.HTTP_200_OK)
 
+    @action(methods=['delete'], detail=True, permission_classes=[IsLeaderOfGroupOrReadOnly], url_path='remove_member/(?P<user_id>[^/.]+)')
+    def remove_member(self, request, *args, **kwargs):
+        group = self.get_object()
+        
+        member = get_object_or_404(User, id=kwargs.get('user_id')) 
+
+        group.users.remove(member)
+    
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @action(methods=['get'], detail=True)
     def request_users(self, request, *args, **kwargs):
         group = self.get_object()
@@ -120,7 +130,7 @@ class GroupGoalsView(viewsets.ModelViewSet):
 
         group_goal.members.remove(member)
 
-        return Response({'Message':'Disabled to a goal'}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated])
     def members(self, request, *args, **kwargs):
