@@ -30,7 +30,15 @@ class BooksView(APIView):
 
         for book in books:
             book['selfLink'] = f"/api/books/{book['id']}/"
-
+            book_reviews = BookReview.objects.filter(book_id=book['id'])
+            book_average_rating = 5
+            if len(book_reviews) > 0:
+                book_total_rating = 0
+                for book_review in book_reviews:
+                    book_total_rating += book_review.stars
+                
+                book_average_rating = book_total_rating / len(book_reviews)
+            book['volumeInfo']['averageRating'] = book_average_rating
 
         serializer = BooksSerializer(data=books, many=True)
         serializer.is_valid(raise_exception=True)
