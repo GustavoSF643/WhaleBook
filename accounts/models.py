@@ -10,7 +10,7 @@ class UserBooks(models.Model):
     image_url = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     total_pages = models.IntegerField()
-    current_page = models.IntegerField()
+    current_page = models.IntegerField(default=0)
     is_favorite = models.BooleanField(default=True)
     is_reading = models.BooleanField(default=False)
     read = models.BooleanField(default=False)

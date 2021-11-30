@@ -1,22 +1,20 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.models import User, UserBooks
-from django.db import IntegrityError
-from rest_framework.response import Response
-from rest_framework import status
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'password',
-                  'is_staff', 'is_superuser', 'is_active']
+        fields = ['id', 'username', 'email', 'password']
     
         extra_kwargs = {
             'id': {'read_only': True},
+            'email': {'required': True},
             'password': {'write_only': True}
         }
-    
+
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
@@ -68,3 +66,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'is_staff', 'is_superuser', 'is_active']
+
+
+class UserBooksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserBooks
+        fields = '__all__'
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
