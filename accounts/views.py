@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from accounts.models import User, UserBooks
 from accounts.serializers import (CreateUserSerializer,
                                   CustomizedTokenPairSerializer, FriendUserSerializer, UserBooksSerializer,
-                                  UserDataSerializer, UserUpdateSerializer)
+                                  UserDataSerializer, UserReviewSerializer, UserUpdateSerializer)
 
 
 class CreateAcountView(APIView):
@@ -146,3 +146,14 @@ class RetrieveUpdateDeleteUserBooks(RetrieveUpdateDestroyAPIView):
             raise PermissionDenied
         
         return obj
+
+class UserReviewsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        reviews = user.reviews
+        serializer = UserReviewSerializer(reviews, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+

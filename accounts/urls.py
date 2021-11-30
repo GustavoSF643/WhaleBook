@@ -2,7 +2,7 @@ from django.urls import path
 
 from accounts.views import (ListAddBookView, AddRemoveUserFriendView, CreateAcountView, RetrieveUpdateDeleteUserBooks,
                             CustomizedTokenObtainPairView, ListUsersView,
-                            RetrieveUpdateUserView, FriendsView, UserRetrieveView)
+                            RetrieveUpdateUserView, FriendsView, UserRetrieveView, UserReviewsView)
 
 urlpatterns = [
     path('accounts/', CreateAcountView.as_view()),
@@ -14,5 +14,5 @@ urlpatterns = [
     path('user/friends/<int:friend_id>/', AddRemoveUserFriendView.as_view()),
     path('user/books/', ListAddBookView.as_view()),
     path('user/books/<int:book_id>/', RetrieveUpdateDeleteUserBooks.as_view()),
-    path('user/reviews/', RetrieveUpdateDeleteUserBooks.as_view()),
+    path('user/reviews/', UserReviewsView.as_view()),
 ]
