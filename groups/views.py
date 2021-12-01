@@ -1,6 +1,6 @@
 from accounts.models import User
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, filters
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .models import Group, GroupGoals, JoinGroupRequest
-from .serializers import GroupGoalSeriliazer, GroupSerializer, UserGroupSerializer, JoinGroupSerializer
+from .serializers import GroupGoalSeriliazer, GroupSerializer, UserGroupSerializer, JoinGroupSerializer, MyGroupsSerializer
 
 class GroupView(viewsets.ModelViewSet):
     queryset = Group.objects.all()
@@ -26,8 +26,16 @@ class GroupView(viewsets.ModelViewSet):
         request.data['leader_id'] = request.auth['user_id']
 
         request.data['user'] = request.user
-
+     
         return super().create(request, *args, **kwargs)
+
+    @action(methods=['get'], detail=False)
+    def my_groups(self, request, *args, **kwargs):
+        user_groups = request.user.groupuser_set.all()
+
+        serializer = MyGroupsSerializer(user_groups, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(methods=['post'], detail=True)
     def subscription(self, request, *args, **kwargs):

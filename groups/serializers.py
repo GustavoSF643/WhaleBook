@@ -38,3 +38,7 @@ class GroupGoalSeriliazer(ModelSerializer):
 
 class JoinGroupSerializer(serializers.Serializer):
     user = UserGroupSerializer(read_only=True)
+
+
+class MyGroupsSerializer(serializers.Serializer):
+    group = GroupSerializer()
