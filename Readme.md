@@ -184,13 +184,13 @@ Response:
 Para rodar os testes, basta digitar o seguinte no terminal:
 
 ```
-python manage.py test
+TEST=TEST python manage.py test
 ```
 
 ## **Tecnologias utilizadas 📱**
 - Django
 - Django Rest Framework
-- SQLite3
+- PostgreSQL
 
 ## **Licence**
 MIT
