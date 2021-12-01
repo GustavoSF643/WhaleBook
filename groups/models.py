@@ -24,6 +24,7 @@ class GroupGoals(models.Model):
     book_url = models.CharField(max_length=255)
     title = models.CharField(max_length=255, unique=True)
     image_url = models.CharField(max_length=255)
+    deadline = models.DateField(null=True)
 
     members = models.ManyToManyField('accounts.User', through='groups.GroupGoalsUsers')
 
