@@ -2,7 +2,13 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    friends = models.ManyToManyField('accounts.User')
+    friends = models.ManyToManyField('accounts.User', through='UserFriends')
+    email = models.EmailField(max_length=254, unique=True)
+
+class UserFriends(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='me')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend')
+    is_friend = models.BooleanField(default=False)
 
 
 class UserBooks(models.Model):

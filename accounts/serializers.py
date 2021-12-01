@@ -1,8 +1,13 @@
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from accounts.models import User, UserBooks
+from accounts.models import User, UserBooks, UserFriends
 
+
+class UserFriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFriends
+        fields = ['friend', 'is_friend']
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
