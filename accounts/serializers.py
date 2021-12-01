@@ -7,7 +7,13 @@ from accounts.models import User, UserBooks, UserFriends
 class UserFriendSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFriends
-        fields = ['friend', 'is_friend']
+        fields = ['friend']
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFriends
+        fields = ['user']
+
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,13 +51,11 @@ class UserBooksSerializer(serializers.ModelSerializer):
 
 
 class UserDataSerializer(serializers.ModelSerializer):
-    friends = FriendUserSerializer(many=True)
     books = UserBooksSerializer(many=True)
     
     class Meta:
         model = User
-        fields = ['id', 'username', 'is_staff', 'is_superuser',
-                  'friends', 'books']
+        fields = ['id', 'username', 'email', 'is_staff', 'is_superuser', 'books']
         
         extra_kwargs = {
             'friends': {'read_only': True},
