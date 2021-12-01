@@ -5,7 +5,7 @@ class User(AbstractUser):
     friends = models.ManyToManyField('accounts.User', through='UserFriends')
     email = models.EmailField(max_length=254, unique=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
 class UserFriends(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='me')
