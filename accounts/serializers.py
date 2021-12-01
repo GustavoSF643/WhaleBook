@@ -74,7 +74,7 @@ class CustomizedTokenPairSerializer(TokenObtainPairSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'is_staff', 'is_superuser', 'is_active']
+        fields = ['id', 'username', 'email', 'is_staff', 'is_superuser', 'is_active']
 
 
 class UserBooksSerializer(serializers.ModelSerializer):
