@@ -112,7 +112,11 @@ class FriendsRequestRetrieveView(APIView):
 
     def delete(self, request, friend_id):
         try:
-            friend_request = UserFriends.objects.filter(user=request.user.id, is_friend=False, friend=friend_id)[0]
+            from django.db.models import Q
+            friend_request = UserFriends.objects.filter(
+                Q(user=request.user.id, friend=friend_id) | Q(friend=request.user.id, user=friend_id),
+                is_friend=False
+            )[0]
         except IndexError:
             return Response({"errors": "Friend not in request list."}, status=status.HTTP_400_BAD_REQUEST)
 
