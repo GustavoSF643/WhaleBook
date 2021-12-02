@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
-from django.http import request
+
 
 class Group(models.Model):
     leader = models.ForeignKey('accounts.User', on_delete=models.PROTECT, related_name='leader')

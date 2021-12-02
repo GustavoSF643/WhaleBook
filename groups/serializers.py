@@ -1,7 +1,9 @@
+from accounts.models import User
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from accounts.models import User
+
 from .models import Group, GroupGoals
+
 
 class UserGroupSerializer(ModelSerializer):
       class Meta:
