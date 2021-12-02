@@ -117,7 +117,7 @@ if test:
         }
     }
 
-DATABASE_URL = os.environ.get('HEROKU_POSTGRESQL_OLIVE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 import dj_database_url
 
