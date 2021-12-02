@@ -1,5 +1,5 @@
 from django.urls import path
-
+from rest_framework_simplejwt.views import TokenRefreshView
 from accounts.views import (FriendsRequestsView, ListAddBookView, AddRemoveUserFriendView, CreateAcountView, RetrieveUpdateDeleteUserBooks,
                             CustomizedTokenObtainPairView, ListUsersView,
                             RetrieveUpdateUserView, FriendsView, UserRetrieveView, 
@@ -7,6 +7,7 @@ from accounts.views import (FriendsRequestsView, ListAddBookView, AddRemoveUserF
 
 urlpatterns = [
     path('accounts/', CreateAcountView.as_view()),
+    path('refresh/', TokenRefreshView.as_view()),
     path('login/', CustomizedTokenObtainPairView.as_view()),
     path('users/', ListUsersView.as_view()),
     path('users/<int:user_id>/', RetrieveUpdateUserView.as_view()),
