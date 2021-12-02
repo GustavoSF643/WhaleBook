@@ -15,7 +15,7 @@ class UserFriends(models.Model):
 
 class UserBooks(models.Model):
     book_url = models.CharField(max_length=255)
-    image_url = models.CharField(max_length=255)
+    image_url = models.TextField()
     title = models.CharField(max_length=255)
     total_pages = models.IntegerField()
     current_page = models.IntegerField(default=0)
