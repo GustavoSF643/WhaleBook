@@ -108,6 +108,26 @@ Response:
 }
 ```
 
+#### **POST /api/refresh/**
+Rota para obter o access token a partir do refresh.
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+Body:
+```
+{
+	"refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzODU0MDMxNCwiaWF0IjoxNjM4NDUzOTE0LCJqdGkiOiJjOTgzYmVhMDg3YmQ0OWI3ODJkMTc3NDA5NThlYWUxYSIsInVzZXJfaWQiOjUsInVzZXIiOiJ0ZXN0ZTUifQ.DVoaoOBdDeNFsUHlDngcp9Vhpt4BlIs5P4UppQav0Pw"
+}
+```
+
+Response:
+```
+{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM4NDU4NzI4LCJpYXQiOjE2Mzg0NTM5MTQsImp0aSI6ImRlZTMyODQxNGM1NzQyNTE5Y2NmZDk1NTdmMjMxYmYzIiwidXNlcl9pZCI6NSwidXNlciI6InRlc3RlNSJ9.kZCu1OCe7qYuwax9lFf4wmXTp4LKqEIr-vvUkAkDY7M"
+}
+```
 
 #### **GET /api/user/**
 Rota com informações sobre o seu usuário. **(Apenas usuário autenticado)**
@@ -180,7 +200,7 @@ Response:
 ```
 
 #### **POST /api/user/books/**
-Rota para vincular livros ao usuário.
+Rota para vincular livros ao usuário.**(Apenas usuário autenticado)**
 
 ```
 RESPONSE STATUS -> HTTP 201 (created)
@@ -214,7 +234,7 @@ Response:
 ```
 
 #### **GET /api/user/books/**
-Rota para listar os livros vinculados ao usuário.
+Rota para listar os livros vinculados ao usuário.**(Apenas usuário autenticado)**
 
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
@@ -239,7 +259,7 @@ Response:
 ```
 
 #### **GET /api/user/books/\<int:book_id>/**
-Rota para obter informações de um livro vinculado ao usuário.
+Rota para obter informações de um livro vinculado ao usuário.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
@@ -260,53 +280,131 @@ Response:
 }
 ```
 #### **PATCH /api/user/books/\<int:book_id>/**
+Rota para atualizar informações de um livro vinculado ao usuário.**(Apenas usuário autenticado)**
 
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
-#### **DELETE /api/user/books/\<int:book_id>/**
+Body:
+```
+{
+	"read": true
+}
+```
 
+Response:
+```
+{
+  "id": 1,
+  "book_url": "/api/books/5unrAgAAQBAJ/",
+  "image_url": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE73Oh67GC3JDW_YrZbK",
+  "title": "O que é o SUS",
+  "total_pages": 148,
+  "current_page": 0,
+  "is_favorite": true,
+  "is_reading": false,
+  "read": true,
+  "user": 1
+}
+```
+
+#### **DELETE /api/user/books/\<int:book_id>/**
+Rota para deletar um livro vinculado ao usuário.**(Apenas usuário autenticado)**
+
+```
+RESPONSE STATUS -> HTTP 204 (No content)
+```
 #### **POST /api/user/friends/requests/\<int:user_id>/**
+Rota para enviar solicitão de amizade para outro usuário.**(Apenas usuário autenticado)**
 
 ```
 RESPONSE STATUS -> HTTP 201 (created)
 ```
 
+Response: 
+```
+[
+  {
+    "friend": 2
+  }
+]
+```
 #### **GET /api/user/friends/requests/**
-
+Rota para listar suas solicitações de amizade.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
+Response: 
+```
+{
+  "sent_requests": [],
+  "received_requests": [
+    {
+      "user": 1
+    }
+  ]
+}
+```
+
 #### **DELETE /api/user/friends/requests/\<int:user_id>/**
+Rota para deletar um solicitação de amizade recebida.**(Apenas usuário autenticado)**
 
 ```
 RESPONSE STATUS -> HTTP 204 (No content)
 ```
 
 #### **POST /api/user/friends/\<int:user_id>/**
-
+Rota para aceitar uma solicitação de amizade.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 201 (created)
 ```
 
-#### **GET /api/user/friends/**
+Response:
+```
+{
+  "message": "Friend added."
+}
+```
 
+#### **GET /api/user/friends/**
+Rota para listar os amigos do usuário.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
-#### **DELETE /api/user/friends/\<int:user_id>/**
+Response: 
+```
+[
+  {
+    "friend": 2
+  }
+]
+```
 
+#### **DELETE /api/user/friends/\<int:user_id>/**
+Rota para deletar um amigo da lista de amigos do usuário.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 204 (No content)
 ```
 
 #### **GET /api/user/reviews/**
-
+Rota para listar os reviews feitos pelo usuário.
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+Response:
+```
+[
+  {
+    "id": 1,
+    "book_id": "5unrAgAAQBAJ",
+    "stars": 5,
+    "review": "teste"
+  }
+]
 ```
 
 #### **POST /api/groups/**
@@ -400,6 +498,34 @@ Rota para listagem de livros, seguindo a api do google disponível em https://de
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
+Response: 
+```
+[
+  {
+    "id": "BBWWAAAAMAAJ",
+    "selfLink": "/api/books/BBWWAAAAMAAJ/",
+    "volumeInfo": {
+      "title": "Using Computers in Legal Research",
+      "subtitle": "A Guide to LEXIS and WESTLAW",
+      "authors": [
+        "Christopher G. Wren",
+        "Jill Robinson Wren"
+      ],
+      "pageCount": 815,
+      "categories": [
+        "Computers"
+      ],
+      "imageLinks": {
+        "smallThumbnail": "http://books.google.com/books/content?id=BBWWAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+        "thumbnail": "http://books.google.com/books/content?id=BBWWAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+      },
+      "language": "en",
+      "averageRating": 5.0
+    }
+  }
+]
+```
+
 
 #### **GET /api/books/\<str:book_id>/**
 Rota para obter informações de um livro pelo id.
@@ -408,32 +534,117 @@ Rota para obter informações de um livro pelo id.
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
+Response: 
+```
+{
+  "id": "5unrAgAAQBAJ",
+  "selfLink": "https://www.googleapis.com/books/v1/volumes/5unrAgAAQBAJ",
+  "volumeInfo": {
+    "title": "O que é o SUS",
+    "authors": [
+      "Jairnilson Paim"
+    ],
+    "description": "A luta pelo direito à saúde e pela consolidação do Sistema Único de Saúde (SUS) brasileiro tem se expressado a partir da articulação de trabalhadores dos campos da saúde, pesquisadores e militantes dos movimentos sociais nas duas últimas décadas. Este livro busca esclarecer o que é, o que não é, o que faz, o que deve fazer e o que pode fazer o SUS. É destinado a todos que estão na luta por uma saúde pública de qualidade, aos trabalhadores do SUS, estudantes, pesquisadores, militantes de movimentos sociais e a sociedade em geral.",
+    "pageCount": 148,
+    "categories": [
+      "Medical / Administration"
+    ],
+    "imageLinks": {
+      "smallThumbnail": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE71q0tgvjQG3IiHa28BBvWFQPpl1eVfvyrMWneFGOgVJDQLhQvufOwWYGDUYCcQQcZlVuxNrX8o__Mbi_EPb7UQmy9of2z0t5PheighMN7qUG2iye1njrcGLOBT6zakR1iTJPEjw&source=gbs_api",
+      "thumbnail": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE73Oh67GC3JDW_YrZbKswAXCJvHnMgElrZcryRgvvalsLCWgxI_9wwCI7ZWaO5jxV3Quje8QiXl-GLlQG2EGYNr7-dvVsCafCnbY5JzkGS--wAS9cCnD7I6c0NcT6TszInL-NJWP&source=gbs_api"
+    },
+    "language": "pt-BR",
+    "averageRating": 5.0
+  }
+}
+```
 #### **POST /api/books/\<str:book_id>/reviews/**
-
+Rota para criação de reviews para um livro.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 201 (created)
 ```
 
+Body:
+```
+{
+	"stars": 5,
+	"review": "teste"
+}
+```
+
+Response:
+```
+{
+  "id": 5,
+  "user": 1,
+  "book_id": "nQo8EAAAQBAJ",
+  "stars": 5,
+  "review": "teste"
+}
+```
+
 #### **GET /api/books/\<str:book_id>/reviews/**
-
+Rota para listar os reviews de um livro.
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
+Response:
+```
+[
+  {
+    "id": 1,
+    "user": 1,
+    "book_id": "5unrAgAAQBAJ",
+    "stars": 5,
+    "review": "teste"
+  }
+]
+```
 #### **GET /api/books/\<str:book_id>/reviews/\<int:review_id>/**
-
+Rota para obter informações de um review de um livro.
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+Response:
+```
+{
+  "id": 1,
+  "user": 1,
+  "book_id": "5unrAgAAQBAJ",
+  "stars": 5,
+  "review": "teste"
+}
 ```
 
 #### **PATCH /api/books/\<str:book_id>/reviews/\<int:review_id>/**
-
+Rota para atualizar uma review feita para um livro.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 200 (ok)
 ```
 
-#### **DELETE /api/books/\<str:book_id>/reviews/\<int:review_id>/**
+Body:
+```
+{
+	"stars": 4,
+	"review": "teste"
+}
+```
 
+Response:
+```
+{
+  "id": 1,
+  "user": 1,
+  "book_id": "5unrAgAAQBAJ",
+  "stars": 4,
+  "review": "teste"
+}
+```
+
+#### **DELETE /api/books/\<str:book_id>/reviews/\<int:review_id>/**
+Rota para deletar o review feito para um livro.**(Apenas usuário autenticado)**
 ```
 RESPONSE STATUS -> HTTP 204 (No content)
 ```
@@ -450,6 +661,13 @@ TEST=TEST python manage.py test
 - Django
 - Django Rest Framework
 - PostgreSQL
+
+## **Autores** ✒️ 
+
+* **Gustavo Silva** - *Tech Leader* - [Gustavo Silva](https://gitlab.com/GustavoSil)
+* **Wander Moreira** - *Scrum Master* - [Wander Moreira](https://gitlab.com/trevius)
+* **Paulo Mello** - *Product Owner* - [Paulo Mello](https://gitlab.com/pauloraphaelmello)
+* **Leomar Romanzini** - *Dev* - [Leomar Romanzini](https://gitlab.com/leomarromanzini)
 
 ## **Licence**
 MIT
