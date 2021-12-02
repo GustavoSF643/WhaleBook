@@ -15,8 +15,8 @@ class GroupUser(models.Model):
     is_admin = models.BooleanField(default=False)
 
 class JoinGroupRequest(models.Model):
-    group = models.ForeignKey('groups.Group', on_delete=models.PROTECT, related_name='requests')
-    user = models.ForeignKey('accounts.User', on_delete=models.PROTECT) 
+    group = models.ForeignKey('groups.Group', on_delete=models.CASCADE, related_name='requests')
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE) 
 
 class GroupGoals(models.Model):
     owner = models.ForeignKey('accounts.User', on_delete=PROTECT, related_name='owner')
@@ -25,6 +25,7 @@ class GroupGoals(models.Model):
     title = models.CharField(max_length=255, unique=True)
     image_url = models.CharField(max_length=255)
     deadline = models.DateField(null=True)
+    description = models.CharField(max_length=511, null=True)
 
     members = models.ManyToManyField('accounts.User', through='groups.GroupGoalsUsers')
 
