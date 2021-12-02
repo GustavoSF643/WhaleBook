@@ -52,7 +52,7 @@ E o sistema estará rodando em http://127.0.0.1:8000/
 
 ### **Utilização** 🖥️
 
-Para utilizar este sistema, é necessário utilizar um API Client, como o Insomnia
+Para utilizar este sistema, é necessário utilizar um API Client, como o Insomnia, ou o front-end https://whalebook.vercel.app/
 
 ## **Rotas**
 
