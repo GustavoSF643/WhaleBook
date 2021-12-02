@@ -54,7 +54,7 @@ E o sistema estará rodando em http://127.0.0.1:8000/
 
 Para utilizar este sistema, é necessário utilizar um API Client, como o Insomnia
 
-### **Rotas**
+## **Rotas**
 
 #### **POST /api/accounts/**
 
@@ -177,6 +177,265 @@ Response:
   "is_active": true
 }
   
+```
+
+#### **POST /api/user/books/**
+Rota para vincular livros ao usuário.
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+Body:
+```
+{
+	"title": "O que é o SUS",
+	"book_url": "/api/books/5unrAgAAQBAJ/",
+	"image_url": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE73Oh67GC3JDW_YrZbK",
+	"total_pages": 148,
+	"is_favorite": true
+}
+```
+
+Response:
+```
+{
+  "id": 1,
+  "book_url": "/api/books/5unrAgAAQBAJ/",
+  "image_url": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE73Oh67GC3JDW_YrZbK",
+  "title": "O que é o SUS",
+  "total_pages": 148,
+  "current_page": 0,
+  "is_favorite": true,
+  "is_reading": false,
+  "read": false,
+  "user": 1
+}
+```
+
+#### **GET /api/user/books/**
+Rota para listar os livros vinculados ao usuário.
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+Response:
+```
+[
+  {
+    "id": 1,
+    "book_url": "/api/books/5unrAgAAQBAJ/",
+    "image_url": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE73Oh67GC3JDW_YrZbK",
+    "title": "O que é o SUS",
+    "total_pages": 148,
+    "current_page": 0,
+    "is_favorite": true,
+    "is_reading": false,
+    "read": false,
+    "user": 1
+  }
+]
+```
+
+#### **GET /api/user/books/\<int:book_id>/**
+Rota para obter informações de um livro vinculado ao usuário.
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+Response:
+```
+{
+  "id": 1,
+  "book_url": "/api/books/5unrAgAAQBAJ/",
+  "image_url": "http://books.google.com/books/publisher/content?id=5unrAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE73Oh67GC3JDW_YrZbK",
+  "title": "O que é o SUS",
+  "total_pages": 148,
+  "current_page": 0,
+  "is_favorite": true,
+  "is_reading": false,
+  "read": false,
+  "user": 1
+}
+```
+#### **PATCH /api/user/books/\<int:book_id>/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **DELETE /api/user/books/\<int:book_id>/**
+
+#### **POST /api/user/friends/requests/\<int:user_id>/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /api/user/friends/requests/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **DELETE /api/user/friends/requests/\<int:user_id>/**
+
+```
+RESPONSE STATUS -> HTTP 204 (No content)
+```
+
+#### **POST /api/user/friends/\<int:user_id>/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /api/user/friends/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **DELETE /api/user/friends/\<int:user_id>/**
+
+```
+RESPONSE STATUS -> HTTP 204 (No content)
+```
+
+#### **GET /api/user/reviews/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **POST /api/groups/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /api/groups/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **GET /api/groups/\<int:group_id>/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **POST /api/groups/\<int:group_id>/subscription/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /api/groups/\<int:group_id>/request_users/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **GET /api/groups/my_groups/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **POST /api/groups/\<int:group_id>/accept_member/\<int:user_id>/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /groups/\<int:group_id>/members/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **DELETE /api/groups/\<int:group_id>/remove_member/\<int:user_id>/**
+
+```
+RESPONSE STATUS -> HTTP 204 (No content)
+```
+
+#### **POST /api/groups/\<int:group_id>/goals/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **POST /api/groups/\<int:group_id>/goals/update_status/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **POST /api/groups/\<int:group_id>/goals/join/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /api/groups/\<int:group_id>/goals/members/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **DELETE /api/groups/\<int:group_id>/goals/leave/**
+
+```
+RESPONSE STATUS -> HTTP 204 (No content)
+```
+
+#### **GET /api/books/?q=search+terms**
+Rota para listagem de livros, seguindo a api do google disponível em https://developers.google.com/books/docs/v1/using
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+
+#### **GET /api/books/\<str:book_id>/**
+Rota para obter informações de um livro pelo id.
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **POST /api/books/\<str:book_id>/reviews/**
+
+```
+RESPONSE STATUS -> HTTP 201 (created)
+```
+
+#### **GET /api/books/\<str:book_id>/reviews/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **GET /api/books/\<str:book_id>/reviews/\<int:review_id>/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **PATCH /api/books/\<str:book_id>/reviews/\<int:review_id>/**
+
+```
+RESPONSE STATUS -> HTTP 200 (ok)
+```
+
+#### **DELETE /api/books/\<str:book_id>/reviews/\<int:review_id>/**
+
+```
+RESPONSE STATUS -> HTTP 204 (No content)
 ```
 
 
