@@ -8,7 +8,6 @@ class ImageLinksSerializer(serializers.Serializer):
 
 class VolumeInfoSerializer(serializers.Serializer):
     title = serializers.CharField()
-    subtitle = serializers.CharField(required=False)
     authors = serializers.ListField(required=False)
     description = serializers.CharField(required=False)
     pageCount = serializers.IntegerField(required=False)

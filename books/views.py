@@ -40,6 +40,7 @@ class BooksView(APIView):
                 book_average_rating = book_total_rating / len(book_reviews)
             book['volumeInfo']['averageRating'] = book_average_rating
 
+        print(books)
         serializer = BooksSerializer(data=books, many=True)
         serializer.is_valid(raise_exception=True)
 
